@@ -54,7 +54,7 @@ public class Spp {
         BluetoothDevice bluetoothDevice = null;
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!bluetoothAdapter.isEnabled()) {
-            listener.onError("Bluetooth is disabled.");
+            listener.onMessage("Bluetooth is disabled.");
             return;
         }
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
@@ -68,8 +68,8 @@ public class Spp {
             }
         }
         if(bluetoothDevice == null){
-            String msg = "bluetoothDevice is null";
-            listener.onError(msg);
+            String msg = "bluetoothDevice is null. deviceName:"+deviceName;
+            listener.onMessage(msg);
             return;
         }
 
@@ -77,13 +77,13 @@ public class Spp {
             //SPP 接続の為のソケットを取得
             BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(SPP_SERVICE_ID);
             if(bluetoothSocket == null){
-                listener.onError("bluetoothSocket is null");
+                listener.onMessage("bluetoothSocket is null");
                 return;
             }
 
             //接続
             bluetoothSocket.connect();
-            listener.onConnect();
+            listener.onMessage("Connect");
 
             //書き込み
             BufferedOutputStream bos = new BufferedOutputStream(bluetoothSocket.getOutputStream());
@@ -105,7 +105,7 @@ public class Spp {
 
             //切断
             bluetoothSocket.close();
-            listener.onClose();
+            listener.onMessage("Close");
         }
         catch (IOException ex) {
 
@@ -122,7 +122,7 @@ public class Spp {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!bluetoothAdapter.isEnabled()) {
             String msg = "Bluetooth is disabled.";
-            listener.onError(msg);
+            listener.onMessage(msg);
             return;
         }
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
@@ -137,7 +137,7 @@ public class Spp {
         }
         if(bluetoothDevice == null){
             String msg = "bluetoothDevice is null";
-            listener.onError(msg);
+            listener.onMessage(msg);
             return;
         }
 
@@ -146,13 +146,13 @@ public class Spp {
             BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(SPP_SERVICE_ID);
             if(bluetoothSocket == null){
                 String msg = "bluetoothSocket is null";
-                listener.onError(msg);
+                listener.onMessage(msg);
                 return;
             }
 
             //接続
             bluetoothSocket.connect();
-            listener.onConnect();
+            listener.onMessage("Connect");
 
             //書き込み
             BufferedOutputStream bos = new BufferedOutputStream(bluetoothSocket.getOutputStream());
@@ -171,7 +171,7 @@ public class Spp {
 
             //切断
             bluetoothSocket.close();
-            listener.onClose();
+            listener.onMessage("Close");
         }
         catch (IOException ex) {
 

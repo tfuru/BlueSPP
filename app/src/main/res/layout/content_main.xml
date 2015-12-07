@@ -25,6 +25,7 @@
         android:id="@+id/txtDeviceName"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
+        android:inputType="text"
         android:text="Bonx" />
 
     <Button

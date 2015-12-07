@@ -8,15 +8,5 @@ public interface SppListener {
      *
      * @param message
      */
-    void onError(final String message);
-
-    /** 接続時に通知
-     *
-     */
-    void onConnect();
-
-    /** 閉じる時通知
-     *
-     */
-    void onClose();
+    void onMessage(final String message);
 }

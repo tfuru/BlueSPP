@@ -119,38 +119,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private SppListener sppListener = new SppListener(){
 
-
         @Override
-        public void onError(final String message) {
+        public void onMessage(final String message) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     Log.d(TAG, message);
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        @Override
-        public void onConnect() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    String message = "CONNECT";
-                    Log.d(TAG,message);
-                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        @Override
-        public void onClose() {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    String message = "SUCCESS";
-                    Log.d(TAG,message);
-                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             });
         }
