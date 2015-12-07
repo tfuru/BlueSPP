@@ -42,7 +42,7 @@ public class Spp {
      * @param deviceName
      */
     public void setDeviceName(final String deviceName){
-        this.deviceName = deviceName;
+        this.deviceName = deviceName.trim();
     }
 
     /** USERID
