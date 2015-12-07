@@ -18,21 +18,40 @@
         android:text="Hello World!"
         android:id="@+id/textView" />
 
-    <Button
-        android:layout_width="wrap_content"
+
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="UserID 書き込む"
-        android:id="@+id/btnWriteUserID"
+        android:id="@+id/txtDeviceName"
         android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:text="Bonx" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="デバイス名 変更"
+        android:id="@+id/btnSetDeviceName"
+        android:layout_below="@+id/txtDeviceName"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UserID 書き込む"
+        android:id="@+id/btnWriteUserID"
+        android:layout_below="@+id/btnSetDeviceName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Advertise 書き込み"
         android:id="@+id/btnWriteAdvertise"
         android:layout_below="@+id/btnWriteUserID"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/btnWriteUserID" />
+
 </RelativeLayout>

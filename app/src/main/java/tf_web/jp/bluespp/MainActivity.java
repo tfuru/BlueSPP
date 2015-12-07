@@ -1,6 +1,7 @@
 package tf_web.jp.bluespp;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import tf_web.jp.bluespp.bluetooth.Spp;
@@ -18,8 +20,12 @@ import tf_web.jp.bluespp.bluetooth.SppListener;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
+    private Handler handler;
+
     //デバイス SPP の テスト用
     private Spp spp;
+
+    private EditText txtDeviceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +34,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        spp = new Spp(getApplicationContext(),sppListener);
+        handler = new Handler();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        String deviceName = "BX1A00002";
+        spp = new Spp(deviceName,getApplicationContext(),sppListener);
+
+        txtDeviceName = (EditText)findViewById(R.id.txtDeviceName);
+        txtDeviceName.setText(deviceName);
+
+        //デバイス名変更
+        Button btnSetDeviceName = (Button) findViewById(R.id.btnSetDeviceName);
+        btnSetDeviceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Log.d(TAG, "USER_ID");
+                Toast.makeText(getApplicationContext(),"SET_DEVICE_NAME",Toast.LENGTH_SHORT).show();
+                final String deviceName = txtDeviceName.getText().toString();
+                spp.setDeviceName(deviceName);
             }
         });
 
@@ -46,8 +60,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Log.d(TAG, "USER_ID");
-                Toast.makeText(getApplicationContext(),"USER_ID",Toast.LENGTH_SHORT).show();
-                spp.writeUserID();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "USER_ID", Toast.LENGTH_SHORT).show();
+                        spp.writeUserID();
+                    }
+                });
             }
         });
 
@@ -57,8 +76,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Log.d(TAG, "ADVERTISE");
-                Toast.makeText(getApplicationContext(),"ADVERTISE",Toast.LENGTH_SHORT).show();
-                spp.writeAdvertise();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "ADVERTISE", Toast.LENGTH_SHORT).show();
+                        spp.writeAdvertise();
+                    }
+                });
             }
         });
     }
@@ -95,10 +119,40 @@ public class MainActivity extends AppCompatActivity {
      */
     private SppListener sppListener = new SppListener(){
 
+
         @Override
-        public void onError(String message) {
-            Log.d(TAG,message);
-            Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+        public void onError(final String message) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG, message);
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onConnect() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    String message = "CONNECT";
+                    Log.d(TAG,message);
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onClose() {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    String message = "SUCCESS";
+                    Log.d(TAG,message);
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+                }
+            });
         }
     };
 }

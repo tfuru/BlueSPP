@@ -28,13 +28,21 @@ public class Spp {
     private SppListener listener;
 
     //接続先デバイス名
-    private static String DeviceName = "Bonx";
+    private String deviceName;
 
-    public Spp(final Context context,final SppListener listener) {
-        Log.d(TAG,"Spp()");
-
+    public Spp(String deviceName,final Context context,final SppListener listener) {
+        Log.d(TAG, "Spp()");
         this.context = context;
         this.listener = listener;
+        this.setDeviceName(deviceName);
+    }
+
+    /** デバイス名を外から設定
+     *
+     * @param deviceName
+     */
+    public void setDeviceName(final String deviceName){
+        this.deviceName = deviceName;
     }
 
     /** USERID
@@ -52,9 +60,11 @@ public class Spp {
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         for (BluetoothDevice dev : bondedDevices) {
             String name = dev.getName();
-            Log.d(TAG,"name:"+name+" "+dev.getAddress());
-            if (name.equals(DeviceName)) {
-                bluetoothDevice = dev;
+            if(name != null) {
+                Log.d(TAG, "name:" + name + " " + dev.getAddress());
+                if (name.equals(deviceName)) {
+                    bluetoothDevice = dev;
+                }
             }
         }
         if(bluetoothDevice == null){
@@ -72,8 +82,8 @@ public class Spp {
             }
 
             //接続
-            Log.d(TAG,"connect()");
             bluetoothSocket.connect();
+            listener.onConnect();
 
             //書き込み
             BufferedOutputStream bos = new BufferedOutputStream(bluetoothSocket.getOutputStream());
@@ -95,7 +105,7 @@ public class Spp {
 
             //切断
             bluetoothSocket.close();
-            Log.d(TAG, "close()");
+            listener.onClose();
         }
         catch (IOException ex) {
 
@@ -118,9 +128,11 @@ public class Spp {
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
         for (BluetoothDevice dev : bondedDevices) {
             String name = dev.getName();
-            Log.d(TAG,"name:"+name+" "+dev.getAddress());
-            if (name.equals(DeviceName)) {
-                bluetoothDevice = dev;
+            if(name != null){
+                Log.d(TAG, "name:" + name + " " +dev.getAddress());
+                if (name.equals(deviceName)) {
+                    bluetoothDevice = dev;
+                }
             }
         }
         if(bluetoothDevice == null){
@@ -139,8 +151,8 @@ public class Spp {
             }
 
             //接続
-            Log.d(TAG,"connect()");
             bluetoothSocket.connect();
+            listener.onConnect();
 
             //書き込み
             BufferedOutputStream bos = new BufferedOutputStream(bluetoothSocket.getOutputStream());
@@ -151,7 +163,7 @@ public class Spp {
                     (byte)0x04,
                     (byte)0x01,
                     (byte)0x02,
-                    (byte)0xfe};
+                    (byte) 0xfe};
             bos.write(cmd_advertise);
             bos.flush();
 
@@ -159,7 +171,7 @@ public class Spp {
 
             //切断
             bluetoothSocket.close();
-            Log.d(TAG, "close()");
+            listener.onClose();
         }
         catch (IOException ex) {
 
